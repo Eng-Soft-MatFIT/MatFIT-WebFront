@@ -1,159 +1,245 @@
 .home {
-  position: relative;
-  height: 100%;
+  font-family: Arial, sans-serif;
 }
 
 .topo {
+  width: 100%;
+  font-size: 24px;
+  margin-bottom: 20px;
   background-color: #007bff;
-  color: #fff;
-  padding: 10px;
+  color: white;
+  padding: 20px;
   text-align: center;
-  border-bottom: 1px solid #0056b3;
-}
-
-.topo span {
-  font-size: 1.2rem;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 .menu-icon {
-  position: fixed;
-  top: 10px;
-  left: 10px;
   cursor: pointer;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .lista-alunos {
-  margin-top: 20px;
   padding: 20px;
-  background-color: #f8f9fa; /* Fundo cinza claro */
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
 }
 
 .lista-alunos h2 {
-  margin-top: 0;
-  margin-bottom: 10px;
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
   color: #333;
-  font-size: 1.5rem;
 }
 
-.lista-alunos ul {
-  list-style-type: none; /* Remove marcadores de lista */
-  padding: 0;
+.aluno-grid {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.lista-alunos li {
-  background-color: #fff;
-  padding: 10px;
+.aluno-card {
+  width: 100%;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.aluno-atributo {
   margin-bottom: 10px;
+  font-size: 16px;
+  color: #555;
+}
+
+.aluno-acoes {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+
+.btn-acoes {
+  font-size: 2.2em;
+  padding: 4px;
+  border: none;
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.2s;
+  opacity: 0.8;
 }
 
-.lista-alunos li:hover {
-  background-color: #f0f0f0; /* Cor de fundo ao passar o mouse */
+.btn-acoes:nth-child(1) {
+  background-color: red;
 }
 
-.lista-alunos li strong {
-  font-size: 1.2rem;
+.btn-acoes:nth-child(3) {
+  background-color: green;
+}
+
+.btn-acoes:hover {
+  opacity: 1;
 }
 
 .adicionar-aluno {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  font-size: 24px;
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #28a745;
-  color: #fff;
-  width: 50px;
-  height: 50px;
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
   border-radius: 50%;
-  text-align: center;
-  line-height: 50px;
-  font-size: 24px;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .adicionar-aluno:hover {
-  background-color: #218838;
+  background-color: #0056b3;
 }
 
-/* Estilos para o modal */
 .modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro semi-transparente */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000; /* Z-index alto para garantir que o modal esteja acima de todo o conteúdo */
+  justify-content: center;
 }
 
 .modal-content {
-  background-color: #fff;
+  background-color: white;
   padding: 20px;
   border-radius: 8px;
-  max-width: 400px;
-  width: 100%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.modal-content h2 {
+.close {
+  cursor: pointer;
+  float: right;
+  font-size: 24px;
+}
+
+h2 {
   margin-top: 0;
-  font-size: 1.5rem;
+  text-align: center;
+  color: #007bff;
 }
 
-.modal-content form {
-  display: grid;
-  gap: 10px;
+label {
+  display: block;
+  margin-bottom: 5px;
 }
 
-.modal-content label {
-  font-weight: bold;
-}
-
-.modal-content input {
+input {
   width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 1rem;
 }
 
-.modal-content .button-container {
+.button-container {
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
+  justify-content: space-between;
 }
 
-.modal-content button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
+button {
+  padding: 10px 15px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1rem;
 }
 
-.modal-content button:hover {
+button[type="button"] {
+  background-color: #ccc;
+  color: #333;
+}
+
+button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+}
+
+button[type="button"]:hover {
+  background-color: #bbb;
+}
+
+button[type="submit"]:hover {
   background-color: #0056b3;
 }
 
-.modal-content .close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #aaa;
+/* Estilos específicos para o modal de pagamento */
+
+.modal-pagamento {
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.modal-content .close:hover {
+.modal-content-pagamento {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content-pagamento h2 {
+  margin-top: 0;
+  text-align: center;
+  color: #007bff;
+}
+
+.modal-content-pagamento .aluno-atributo {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #555;
+}
+
+.modal-content-pagamento .button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.modal-content-pagamento button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-content-pagamento button[type="button"] {
+  background-color: #ccc;
   color: #333;
+}
+
+.modal-content-pagamento button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-content-pagamento button[type="button"]:hover {
+  background-color: #bbb;
+}
+
+.modal-content-pagamento button[type="submit"]:hover {
+  background-color: #0056b3;
 }

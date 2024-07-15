@@ -51,6 +51,11 @@
     font-size: 1em;
 }
 
+.login-form p {
+    color: rgb(109, 8, 8);
+    font-weight: bold;
+}
+
 .login-container button {
     width: 100%;
     border-radius: 5px;

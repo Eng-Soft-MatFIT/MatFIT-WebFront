@@ -1,19 +1,24 @@
 import "./Login.css";
 import weigth from "../../assets/peso-de-academia.png";
-import { useState } from "react";
 import {useNavigate} from "react-router-dom"
+import { useLogin } from "../../hooks/useLogin";
+
+interface User {
+  username : string
+}
 
 function Login() {
-  const [name, setName] = useState("");
 
   const navigate = useNavigate();
 
-  function loginUser(){
-    localStorage.setItem("username", name);
+  const { register, handleSubmit, errors } = useLogin();
+
+  function loginUser(user : User){
+    localStorage.setItem("username", user.username);
     navigate("/home");
   }
   return (
-    <div className="login">
+    <form className="login" onSubmit={handleSubmit(loginUser)}>
       <h2>Login</h2>
 
       <div className="login-container">
@@ -24,16 +29,16 @@ function Login() {
           <input
             type="text"
             placeholder="Digite seu nome"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            {...register("username")}
           />
+          <p>{errors.username?.message}</p>
         </div>
 
-        <button type="button" onClick={loginUser}>
+        <button type="submit">
           Entrar
         </button>
       </div>
-    </div>
+    </form>
   );
 }
 

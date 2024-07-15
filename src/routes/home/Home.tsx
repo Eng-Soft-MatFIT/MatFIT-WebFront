@@ -1,47 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './Home.css';
 import { AlunoService } from '../../service/AlunoService';
-import { BsPersonFillAdd } from 'react-icons/bs';
-import { User } from '../../types/User';
+import { BsCashCoin, BsFillTrashFill, BsPencilSquare, BsPersonFillAdd } from 'react-icons/bs';
+import { User, UserResponse, UserUpdate } from '../../types/User';
 
 function Home() {
   const [username, setUsername] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [alunos, setAlunos] = useState<User[]>([]); // Estado para armazenar a lista de alunos
+  const [alunos, setAlunos] = useState<UserResponse[]>([]);
   const [cpf, setCpf] = useState('');
   const [nome, setNome] = useState('');
   const [esporte, setEsporte] = useState('');
-  const [dataPagamento, setDataPagamento] = useState('');
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [selectedAluno, setSelectedAluno] = useState<UserResponse | null>(null);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) {
       setUsername(storedUsername);
     }
-    carregarAlunos(); // Carrega a lista de alunos ao carregar a página inicial
+    carregarAlunos();
   }, []);
 
   const alunoService = new AlunoService();
 
   const carregarAlunos = async () => {
     try {
-      const response = await alunoService.findAllUsers(); // Chama o método da service para buscar os alunos
-      setAlunos(response); // Atualiza o estado 'alunos' com os dados recebidos da API
+      const response = await alunoService.findAllUsers();
+      setAlunos(response);
     } catch (error) {
       console.error('Erro ao carregar alunos:', error);
     }
   };
 
-  const cadastrarAluno = () => {
+  const cadastrarAluno = async () => {
     const aluno: User = {
       cpf: cpf,
       nome: nome,
       esporte: esporte,
-      dataPagamento: dataPagamento
     };
-    alunoService.insertUser(aluno);
+    await alunoService.insertUser(aluno);
     fecharModal();
-    carregarAlunos(); // Recarrega a lista de alunos após cadastrar um novo aluno
+    carregarAlunos();
   };
 
   const abrirModal = () => {
@@ -50,46 +51,107 @@ function Home() {
 
   const fecharModal = () => {
     setIsModalOpen(false);
-    // Limpar os campos do modal ao fechar
     setCpf('');
     setNome('');
     setEsporte('');
-    setDataPagamento('');
+  };
+
+  const removerAluno = async (cpf: string) => {
+    if (window.confirm('Você realmente quer remover este aluno?')) {
+      await alunoService.removeUser(cpf);
+      carregarAlunos();
+    }
+  };
+
+  const abrirEditModal = (aluno: User) => {
+    setSelectedAluno(aluno);
+    setNome(aluno.nome);
+    setEsporte(aluno.esporte);
+    setIsEditModalOpen(true);
+  };
+
+  const fecharEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedAluno(null);
+    setNome('');
+    setEsporte('');
+  };
+
+  const atualizarAluno = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (selectedAluno) {
+      const alunoAtualizado: UserUpdate = {
+        nome: nome,
+        esporte: esporte,
+      };
+      await alunoService.updateUser(selectedAluno.cpf, alunoAtualizado);
+      fecharEditModal();
+      carregarAlunos();
+    }
+  };
+
+  const abrirPaymentModal = async (aluno: User) => {
+    const data = await alunoService.verifyPayment(aluno.cpf);
+    if (data) {
+      setSelectedAluno(aluno);
+      setIsPaymentModalOpen(true);
+    }
+  };
+
+  const fecharPaymentModal = () => {
+    setIsPaymentModalOpen(false);
+    setSelectedAluno(null);
+  };
+
+  const confirmarPagamento = async () => {
+    if (selectedAluno) {
+      if(!selectedAluno.pagamentoAtrasado) {
+        alert("Seu pagamento está EM DIA")
+        return;
+      }
+      await alunoService.confirmPayment(selectedAluno.cpf);
+      fecharPaymentModal();
+      carregarAlunos();
+    }
   };
 
   return (
     <div className='home'>
-      {/* Topo da tela com o nome de usuário */}
       <div className='topo'>
         <span>Olá, {username}</span>
       </div>
-
-      {/* Ícone de menu no lado esquerdo */}
       <div className='menu-icon' onClick={() => alert('Menu aberto!')}>
         <i className='fa fa-bars'></i>
       </div>
-
-      {/* Lista de alunos */}
       <div className='lista-alunos'>
         <h2>Lista de Alunos</h2>
-        <div>
+        <div className='aluno-grid'>
           {alunos && alunos.map((aluno) => (
-            <div key={aluno.cpf}>
-              <span>{aluno.cpf}</span>
-              <span>{aluno.nome}</span>
-              <span>{aluno.esporte}</span>
-              <span>{aluno.dataPagamento}</span>
+            <div key={aluno.cpf} className='aluno-card'>
+              <div className='aluno-atributo'>
+                <strong>CPF:</strong> {aluno.cpf}
+              </div>
+              <div className='aluno-atributo'>
+                <strong>Nome:</strong> {aluno.nome}
+              </div>
+              <div className='aluno-atributo'>
+                <strong>Esporte:</strong> {aluno.esporte}
+              </div>
+              <div className='aluno-atributo'>
+                <strong>Data de Pagamento:</strong> {aluno.dataPagamento}
+              </div>
+              <div className='aluno-acoes'>
+                <BsFillTrashFill onClick={() => removerAluno(aluno.cpf)} className='btn-acoes'/>
+                <BsPencilSquare onClick={() => abrirEditModal(aluno)} className='btn-acoes'/>
+                <BsCashCoin onClick={() => abrirPaymentModal(aluno)} className='btn-acoes'/>
+              </div>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Ícone de adicionar aluno na parte inferior */}
       <div className='adicionar-aluno' onClick={abrirModal}>
         <BsPersonFillAdd />
       </div>
-
-      {/* Modal para cadastrar aluno */}
       {isModalOpen && (
         <div className='modal'>
           <div className='modal-content'>
@@ -98,21 +160,60 @@ function Home() {
             <form onSubmit={cadastrarAluno}>
               <label>CPF:</label>
               <input type='text' value={cpf} onChange={(e) => setCpf(e.target.value)} required />
-
               <label>Nome:</label>
               <input type='text' value={nome} onChange={(e) => setNome(e.target.value)} required />
-
               <label>Esporte:</label>
               <input type='text' value={esporte} onChange={(e) => setEsporte(e.target.value)} required />
-
-              <label>Data do Pagamento:</label>
-              <input type='date' value={dataPagamento} onChange={(e) => setDataPagamento(e.target.value)} required />
-
               <div className='button-container'>
                 <button type='button' onClick={fecharModal}>Cancelar</button>
                 <button type='submit'>Cadastrar</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {isEditModalOpen && (
+        <div className='modal'>
+          <div className='modal-content'>
+            <span className='close' onClick={fecharEditModal}>&times;</span>
+            <h2>Atualizar Aluno</h2>
+            <form onSubmit={atualizarAluno}>
+              <label>Nome:</label>
+              <input type='text' value={nome} onChange={(e) => setNome(e.target.value)} required />
+              <label>Esporte:</label>
+              <input type='text' value={esporte} onChange={(e) => setEsporte(e.target.value)} required />
+              <div className='button-container'>
+                <button type='button' onClick={fecharEditModal}>Cancelar</button>
+                <button type='submit'>Atualizar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {isPaymentModalOpen && selectedAluno && (
+        <div className='modal'>
+          <div className='modal-content'>
+            <span className='close' onClick={fecharPaymentModal}>&times;</span>
+            <h2>Confirmar Pagamento</h2>
+            <div className='aluno-atributo'>
+              <strong>CPF:</strong> {selectedAluno.cpf}
+            </div>
+            <div className='aluno-atributo'>
+              <strong>Nome:</strong> {selectedAluno.nome}
+            </div>
+            <div className='aluno-atributo'>
+              <strong>Esporte:</strong> {selectedAluno.esporte}
+            </div>
+            <div className='aluno-atributo'>
+              <strong>Data do Pagamento:</strong> {selectedAluno.dataPagamento}
+            </div>
+            <div className='aluno-atributo'>
+              <strong>Status:</strong> {selectedAluno.pagamentoAtrasado ? <span>ATRASADO</span> : <span>EM DIA</span>}
+            </div>
+            <div className='button-container'>
+              <button type='button' onClick={fecharPaymentModal}>Cancelar</button>
+              <button type='button' onClick={confirmarPagamento}>Pagar</button>
+            </div>
           </div>
         </div>
       )}
