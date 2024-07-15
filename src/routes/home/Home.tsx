@@ -63,7 +63,7 @@ function Home() {
     }
   };
 
-  const abrirEditModal = (aluno: User) => {
+  const abrirEditModal = (aluno: UserResponse) => {
     setSelectedAluno(aluno);
     setNome(aluno.nome);
     setEsporte(aluno.esporte);
@@ -90,7 +90,7 @@ function Home() {
     }
   };
 
-  const abrirPaymentModal = async (aluno: User) => {
+  const abrirPaymentModal = async (aluno: UserResponse) => {
     const data = await alunoService.verifyPayment(aluno.cpf);
     if (data) {
       setSelectedAluno(aluno);
