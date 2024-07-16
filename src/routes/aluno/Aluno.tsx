@@ -1,9 +1,12 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Aluno.css';
 import { AlunoService } from '../../service/AlunoService';
 import { BsCashCoin, BsFillTrashFill, BsMenuButton, BsPencilSquare, BsPersonFillAdd } from 'react-icons/bs';
 import { User, UserResponse, UserUpdate } from '../../types/User';
-import Menu from '../../components/Menu'; // Importando o Menu
+import Menu from '../../components/Menu';
+import CadastroModalAluno from '../../components/CadastroModalAluno';
+import EditModalAluno from '../../components/EditModalAluno';
+import PaymentModal from '../../components/PaymentModal';
 
 function Aluno() {
   const [username, setUsername] = useState('');
@@ -35,21 +38,15 @@ function Aluno() {
     }
   };
 
-  const cadastrarAluno = async () => {
-    const aluno: User = {
-      cpf: cpf,
-      nome: nome,
-      esporte: esporte,
-    };
+  const cadastrarAluno = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const aluno: User = { cpf, nome, esporte };
     await alunoService.insertUser(aluno);
     fecharModal();
     carregarAlunos();
   };
 
-  const abrirModal = () => {
-    setIsModalOpen(true);
-  };
-
+  const abrirModal = () => setIsModalOpen(true);
   const fecharModal = () => {
     setIsModalOpen(false);
     setCpf('');
@@ -81,10 +78,7 @@ function Aluno() {
   const atualizarAluno = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedAluno) {
-      const alunoAtualizado: UserUpdate = {
-        nome: nome,
-        esporte: esporte,
-      };
+      const alunoAtualizado: UserUpdate = { nome, esporte };
       await alunoService.updateUser(selectedAluno.cpf, alunoAtualizado);
       fecharEditModal();
       carregarAlunos();
@@ -120,15 +114,15 @@ function Aluno() {
 
   return (
     <div className='home'>
-      {menu && <Menu onClose={() => setMenu(false)}/>}
+      {menu && <Menu onClose={() => setMenu(false)} />}
       <div className='topo'>
-        <BsMenuButton className='btn-menu'onClick={() => setMenu(true)}/>
+        <BsMenuButton className='btn-menu' onClick={() => setMenu(true)} />
         <span>Olá, {username}</span>
       </div>
       <div className='lista-alunos'>
         <h2>Lista de Alunos</h2>
         <div className='aluno-grid'>
-          {alunos && alunos.map((aluno) => (
+          {alunos.map((aluno) => (
             <div key={aluno.cpf} className='aluno-card'>
               <div className='aluno-atributo'>
                 <strong>CPF:</strong> {aluno.cpf}
@@ -143,9 +137,9 @@ function Aluno() {
                 <strong>Data de Pagamento:</strong> {aluno.dataPagamento}
               </div>
               <div className='aluno-acoes'>
-                <BsFillTrashFill onClick={() => removerAluno(aluno.cpf)} className='btn-acoes'/>
-                <BsPencilSquare onClick={() => abrirEditModal(aluno)} className='btn-acoes'/>
-                <BsCashCoin onClick={() => abrirPaymentModal(aluno)} className='btn-acoes'/>
+                <BsFillTrashFill onClick={() => removerAluno(aluno.cpf)} className='btn-acoes' />
+                <BsPencilSquare onClick={() => abrirEditModal(aluno)} className='btn-acoes' />
+                <BsCashCoin onClick={() => abrirPaymentModal(aluno)} className='btn-acoes' />
               </div>
             </div>
           ))}
@@ -155,66 +149,33 @@ function Aluno() {
         <BsPersonFillAdd />
       </div>
       {isModalOpen && (
-        <div className='modal'>
-          <div className='modal-content'>
-            <span className='close' onClick={fecharModal}>&times;</span>
-            <h2>Cadastrar Aluno</h2>
-            <form onSubmit={cadastrarAluno}>
-              <label>CPF:</label>
-              <input type='text' value={cpf} onChange={(e) => setCpf(e.target.value)} required />
-              <label>Nome:</label>
-              <input type='text' value={nome} onChange={(e) => setNome(e.target.value)} required />
-              <label>Esporte:</label>
-              <input type='text' value={esporte} onChange={(e) => setEsporte(e.target.value)} required />
-              <div className='button-container'>
-                <button type='button' onClick={fecharModal}>Cancelar</button>
-                <button type='submit'>Cadastrar</button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <CadastroModalAluno
+          cpf={cpf}
+          nome={nome}
+          esporte={esporte}
+          setCpf={setCpf}
+          setNome={setNome}
+          setEsporte={setEsporte}
+          cadastrarAluno={cadastrarAluno}
+          fecharModal={fecharModal}
+        />
       )}
       {isEditModalOpen && (
-        <div className='modal'>
-          <div className='modal-content'>
-            <span className='close' onClick={fecharEditModal}>&times;</span>
-            <h2>Atualizar Aluno</h2>
-            <form onSubmit={atualizarAluno}>
-              <label>Nome:</label>
-              <input type='text' value={nome} onChange={(e) => setNome(e.target.value)} required />
-              <label>Esporte:</label>
-              <input type='text' value={esporte} onChange={(e) => setEsporte(e.target.value)} required />
-              <div className='button-container'>
-                <button type='button' onClick={fecharEditModal}>Cancelar</button>
-                <button type='submit'>Atualizar</button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <EditModalAluno
+          nome={nome}
+          esporte={esporte}
+          setNome={setNome}
+          setEsporte={setEsporte}
+          atualizarAluno={atualizarAluno}
+          fecharEditModal={fecharEditModal}
+        />
       )}
       {isPaymentModalOpen && selectedAluno && (
-        <div className='modal modal-pagamento'>
-          <div className='modal-content modal-content-pagamento'>
-            <span className='close' onClick={fecharPaymentModal}>&times;</span>
-            <h2>Confirmar Pagamento</h2>
-            <div className='aluno-atributo'>
-              <strong>CPF:</strong> {selectedAluno.cpf}
-            </div>
-            <div className='aluno-atributo'>
-              <strong>Nome:</strong> {selectedAluno.nome}
-            </div>
-            <div className='aluno-atributo'>
-              <strong>Esporte:</strong> {selectedAluno.esporte}
-            </div>
-            <div className='aluno-atributo'>
-              <strong>Data de Pagamento:</strong> {selectedAluno.dataPagamento}
-            </div>
-            <div className='button-container'>
-              <button type='button' onClick={fecharPaymentModal}>Cancelar</button>
-              <button type='button' onClick={confirmarPagamento}>Confirmar</button>
-            </div>
-          </div>
-        </div>
+        <PaymentModal
+          selectedAluno={selectedAluno}
+          confirmarPagamento={confirmarPagamento}
+          fecharPaymentModal={fecharPaymentModal}
+        />
       )}
     </div>
   );

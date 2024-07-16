@@ -1,10 +1,10 @@
-import { Equipamento } from "../types/Equipamento";
+import { EquipamentoUpdate } from "../types/Equipamento";
 
 export class EquipamentoService {
 
   apiUrl = "http://localhost:8080";
 
-  async insertEquipamento(equipamento: Equipamento) {
+  async insertEquipamento(equipamento: EquipamentoUpdate) {
     try {
       const response = await fetch(`${this.apiUrl}/equipamento`, {
         method: 'POST',
@@ -46,7 +46,7 @@ export class EquipamentoService {
       }
   }
 
-  async updateEquipamento( id : number, equipamento : Equipamento){
+  async updateEquipamento( id : number, equipamento : EquipamentoUpdate){
     try {
       const response = await fetch(`${this.apiUrl}/equipamento/${id}`, {
         method: 'PUT',
