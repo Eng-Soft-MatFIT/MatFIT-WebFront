@@ -9,7 +9,7 @@
   background-color: #007bff;
   color: white;
   padding: 20px;
-  position: relative;
+  position: fixed;
   text-align: center;
   display: flex;
   align-items: end;
@@ -38,6 +38,7 @@
 }
 
 .lista-alunos {
+  margin-top: 60px;
   padding: 20px;
 }
 
