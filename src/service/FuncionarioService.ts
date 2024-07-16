@@ -1,10 +1,10 @@
-import { Funcionario, FuncionarioUpdate } from "../types/Funcionario";
+import { FuncionarioResponse, FuncionarioUpdate } from "../types/Funcionario";
 
 export class FuncionarioService {
 
   apiUrl = "http://localhost:8080";
 
-  async insertFuncionario(funcionario: Funcionario) {
+  async insertFuncionario(funcionario: FuncionarioResponse) {
     try {
       const response = await fetch(`${this.apiUrl}/funcionario`, {
         method: 'POST',

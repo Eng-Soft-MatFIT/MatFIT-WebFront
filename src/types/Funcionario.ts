@@ -1,4 +1,4 @@
-export interface Funcionario {
+export interface FuncionarioResponse {
     cpf: string;
     nome : string;
     funcao: string;
