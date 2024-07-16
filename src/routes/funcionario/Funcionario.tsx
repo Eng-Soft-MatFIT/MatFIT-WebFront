@@ -101,7 +101,7 @@ function Funcionario() {
       <div className='lista-funcionarios'>
         <h2>Lista de Funcionários</h2>
         <div className='funcionario-grid'>
-          {funcionarios.map((funcionario) => (
+          {funcionarios && funcionarios.map((funcionario) => (
             <div key={funcionario.cpf} className='funcionario-card'>
               <div className='funcionario-atributo'>
                 <strong>CPF:</strong> {funcionario.cpf}

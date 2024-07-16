@@ -93,7 +93,7 @@ function Equipamento() {
       <div className='lista-equipamentos'>
         <h2>Lista de Equipamentos</h2>
         <div className='equipamento-grid'>
-          {equipamentos.map((equipamento) => (
+          {equipamentos && equipamentos.map((equipamento) => (
             <div key={equipamento.id} className='equipamento-card'>
               <div className='equipamento-atributo'>
                 <strong>Nome:</strong> {equipamento.nome}

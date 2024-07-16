@@ -122,7 +122,7 @@ function Aluno() {
       <div className='lista-alunos'>
         <h2>Lista de Alunos</h2>
         <div className='aluno-grid'>
-          {alunos.map((aluno) => (
+          {alunos && alunos.map((aluno) => (
             <div key={aluno.cpf} className='aluno-card'>
               <div className='aluno-atributo'>
                 <strong>CPF:</strong> {aluno.cpf}
