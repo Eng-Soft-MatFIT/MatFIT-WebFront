@@ -1,6 +1,6 @@
 .login {
     height: 100%;
-    background: linear-gradient(#7E62DD, #AA7DF2, #6253D4);
+    background: linear-gradient(#007bff98,#0065d1, #004691);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -52,8 +52,9 @@
 }
 
 .login-form p {
-    color: rgb(109, 8, 8);
+    color: rgb(117, 2, 2);
     font-weight: bold;
+    margin-top: -1em;
 }
 
 .login-container button {

@@ -6,6 +6,7 @@ import Menu from '../../components/Menu';
 import { EquipamentoResponse , EquipamentoUpdate } from '../../types/Equipamento';
 import CadastroModalEquipamento from '../../components/CadastroModalEquipamento';
 import EditModalEquipamento from '../../components/EditModalEquipamento';
+import NotFound from '../../components/NotFound';
 
 function Equipamento() {
   const [username, setUsername] = useState('');
@@ -91,7 +92,7 @@ function Equipamento() {
         <span>Olá, {username}</span>
       </div>
       <div className='lista-equipamentos'>
-        <h2>Lista de Equipamentos</h2>
+        <h2 className='lista-equipamentos-titulo'>Lista de Equipamentos</h2>
         <div className='equipamento-grid'>
           {equipamentos && equipamentos.map((equipamento) => (
             <div key={equipamento.id} className='equipamento-card'>
@@ -107,6 +108,8 @@ function Equipamento() {
               </div>
             </div>
           ))}
+
+          {equipamentos && equipamentos.length === 0 && <NotFound title='Nenhum equipamento cadastrado'/>}
         </div>
       </div>
       <div className='adicionar-equipamento' onClick={abrirModal}>

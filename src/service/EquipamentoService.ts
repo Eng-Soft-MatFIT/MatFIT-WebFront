@@ -43,6 +43,7 @@ export class EquipamentoService {
   
       } catch (error) {
         console.error(error);
+        return [];
       }
   }
 

@@ -6,6 +6,7 @@ import Menu from '../../components/Menu';
 import CadastroModalFuncionario from '../../components/CadastroModalFuncionario';
 import EditModalFuncionario from '../../components/EditModalFuncionario';
 import { FuncionarioResponse, FuncionarioUpdate } from '../../types/Funcionario';
+import NotFound from '../../components/NotFound';
 
 function Funcionario() {
   const [username, setUsername] = useState('');
@@ -99,7 +100,7 @@ function Funcionario() {
         <span>Olá, {username}</span>
       </div>
       <div className='lista-funcionarios'>
-        <h2>Lista de Funcionários</h2>
+        <h2 className='lista-funcionarios-titulo'>Lista de Funcionários</h2>
         <div className='funcionario-grid'>
           {funcionarios && funcionarios.map((funcionario) => (
             <div key={funcionario.cpf} className='funcionario-card'>
@@ -121,6 +122,8 @@ function Funcionario() {
               </div>
             </div>
           ))}
+
+          {funcionarios && funcionarios.length === 0 && <NotFound title='Nenhum funcionário cadastrado'/>}
         </div>
       </div>
       <div className='adicionar-funcionario' onClick={abrirModal}>

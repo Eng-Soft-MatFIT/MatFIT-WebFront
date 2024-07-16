@@ -7,7 +7,8 @@ export const useLogin = () => {
     username: yup
       .string()
       .required("Campo obrigatório")
-      .min(3, "Mínimo de 3 caracteres"),
+      .min(3, "Mínimo de 3 caracteres")
+      .max(20, "Máximo de 20 caracteres")
   });
 
   const {

@@ -43,6 +43,7 @@ export class FuncionarioService {
   
       } catch (error) {
         console.error(error);
+        return [];
       }
   }
 

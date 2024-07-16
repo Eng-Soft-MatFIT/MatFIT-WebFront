@@ -43,6 +43,7 @@ export class AlunoService {
   
       } catch (error) {
         console.error('Erro ao inserir aluno:', error);
+        return [];
       }
   }
 
