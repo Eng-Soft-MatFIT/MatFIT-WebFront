@@ -14,6 +14,7 @@ import CadastroModalAluno from "../../components/CadastroModalAluno";
 import EditModalAluno from "../../components/EditModalAluno";
 import PaymentModal from "../../components/PaymentModal";
 import NotFound from "../../components/NotFound";
+import Loading from "../../components/Loading";
 
 function Aluno() {
   const [username, setUsername] = useState("");
@@ -25,6 +26,7 @@ function Aluno() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedAluno, setSelectedAluno] = useState<UserResponse | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -38,17 +40,24 @@ function Aluno() {
 
   const carregarAlunos = async () => {
     try {
+      setLoading(true);
       const response = await alunoService.findAllUsers();
       setAlunos(response);
     } catch (error) {
       console.error("Erro ao carregar alunos:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const cadastrarAluno = async (e: React.FormEvent) => {
     e.preventDefault();
     const aluno: User = { cpf, nome, esporte };
+
+    setLoading(true);
     await alunoService.insertUser(aluno);
+    setLoading(false);
+
     fecharModal();
     carregarAlunos();
   };
@@ -63,7 +72,10 @@ function Aluno() {
 
   const removerAluno = async (cpf: string) => {
     if (window.confirm("Você realmente quer remover este aluno?")) {
+      setLoading(true);
       await alunoService.removeUser(cpf);
+      setLoading(false);
+
       carregarAlunos();
     }
   };
@@ -86,7 +98,10 @@ function Aluno() {
     e.preventDefault();
     if (selectedAluno) {
       const alunoAtualizado: UserUpdate = { nome, esporte };
+      setLoading(true);
       await alunoService.updateUser(selectedAluno.cpf, alunoAtualizado);
+      setLoading(false);
+
       fecharEditModal();
       carregarAlunos();
     }
@@ -111,13 +126,20 @@ function Aluno() {
         alert("Seu pagamento está EM DIA");
         return;
       }
+
+      setLoading(true);
       await alunoService.confirmPayment(selectedAluno.cpf);
+      setLoading(false);
       fecharPaymentModal();
       carregarAlunos();
     }
   };
 
   const [menu, setMenu] = useState(false);
+
+  function showLoading (){
+    return <Loading />;
+  }
 
   return (
     <div className="home">
@@ -196,6 +218,7 @@ function Aluno() {
           fecharPaymentModal={fecharPaymentModal}
         />
       )}
+      {loading && showLoading()}
     </div>
   );
 }

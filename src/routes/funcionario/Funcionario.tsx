@@ -7,6 +7,7 @@ import CadastroModalFuncionario from '../../components/CadastroModalFuncionario'
 import EditModalFuncionario from '../../components/EditModalFuncionario';
 import { FuncionarioResponse, FuncionarioUpdate } from '../../types/Funcionario';
 import NotFound from '../../components/NotFound';
+import Loading from '../../components/Loading';
 
 function Funcionario() {
   const [username, setUsername] = useState('');
@@ -18,6 +19,7 @@ function Funcionario() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedFuncionario, setSelectedFuncionario] = useState<FuncionarioResponse | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -31,17 +33,22 @@ function Funcionario() {
 
   const carregarFuncionarios = async () => {
     try {
+      setLoading(true);
       const response = await funcionarioService.findAllFuncionario();
       setFuncionarios(response);
     } catch (error) {
       console.error('Erro ao carregar funcionários:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const cadastrarFuncionario = async (e: React.FormEvent) => {
     e.preventDefault();
     const funcionario: FuncionarioResponse = { cpf, nome, funcao, cargaHoraria };
+    setLoading(true);
     await funcionarioService.insertFuncionario(funcionario);
+    setLoading(false);
     fecharModal();
     carregarFuncionarios();
   };
@@ -57,7 +64,9 @@ function Funcionario() {
 
   const removerFuncionario = async (cpf: string) => {
     if (window.confirm('Você realmente quer remover este funcionário?')) {
+      setLoading(true);
       await funcionarioService.removeFuncionario(cpf);
+      setLoading(false);
       carregarFuncionarios();
     }
   };
@@ -84,13 +93,19 @@ function Funcionario() {
     e.preventDefault();
     if (selectedFuncionario) {
       const funcionarioAtualizado: FuncionarioUpdate = { nome, funcao, cargaHoraria };
+      setLoading(true);
       await funcionarioService.updateFuncionario(selectedFuncionario.cpf, funcionarioAtualizado);
+      setLoading(false);
       fecharEditModal();
       carregarFuncionarios();
     }
   };
 
   const [menu, setMenu] = useState(false);
+
+  function showLoading(){
+    return <Loading />
+  }
 
   return (
     <div className='home'>
@@ -163,6 +178,7 @@ function Funcionario() {
           </div>
         </div>
       )}
+      {loading && <Loading />}
     </div>
   );
 }

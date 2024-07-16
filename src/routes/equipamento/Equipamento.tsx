@@ -7,6 +7,7 @@ import { EquipamentoResponse , EquipamentoUpdate } from '../../types/Equipamento
 import CadastroModalEquipamento from '../../components/CadastroModalEquipamento';
 import EditModalEquipamento from '../../components/EditModalEquipamento';
 import NotFound from '../../components/NotFound';
+import Loading from '../../components/Loading';
 
 function Equipamento() {
   const [username, setUsername] = useState('');
@@ -16,6 +17,7 @@ function Equipamento() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedEquipamento, setSelectedEquipamento] = useState<EquipamentoResponse | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -29,17 +31,24 @@ function Equipamento() {
 
   const carregarEquipamentos = async () => {
     try {
+      setLoading(true);
       const response = await equipamentoService.findAllEquipamento();
       setEquipamentos(response);
     } catch (error) {
       console.error('Erro ao carregar equipamentos:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const cadastrarEquipamento = async (e: React.FormEvent) => {
     e.preventDefault();
     const equipamento : EquipamentoUpdate = { nome, quantidade };
+
+    setLoading(true);
     await equipamentoService.insertEquipamento(equipamento);
+    setLoading(false);
+
     fecharModal();
     carregarEquipamentos();
   };
@@ -53,7 +62,9 @@ function Equipamento() {
 
   const removerEquipamento = async (id: number) => {
     if (window.confirm('Você realmente quer remover este equipamento?')) {
+      setLoading(true);
       await equipamentoService.removeEquipamento(id);
+      setLoading(false);
       carregarEquipamentos();
     }
   };
@@ -76,13 +87,19 @@ function Equipamento() {
     e.preventDefault();
     if (selectedEquipamento) {
       const equipamentoAtualizado : EquipamentoUpdate = { nome, quantidade };
+      setLoading(true);
       await equipamentoService.updateEquipamento(selectedEquipamento.id, equipamentoAtualizado);
+      setLoading(false);
       fecharEditModal();
       carregarEquipamentos();
     }
   };
 
   const [menu, setMenu] = useState(false);
+
+  function showLoading() {
+    return <Loading />
+  }
 
   return (
     <div className='home'>
@@ -135,6 +152,7 @@ function Equipamento() {
           fecharEditModal={fecharEditModal}
         />
       )}
+      {loading && showLoading()}
     </div>
   );
 }
