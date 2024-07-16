@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import './Home.css';
+import './Aluno.css';
 import { AlunoService } from '../../service/AlunoService';
-import { BsCashCoin, BsFillTrashFill, BsPencilSquare, BsPersonFillAdd } from 'react-icons/bs';
+import { BsCashCoin, BsFillTrashFill, BsMenuButton, BsPencilSquare, BsPersonFillAdd } from 'react-icons/bs';
 import { User, UserResponse, UserUpdate } from '../../types/User';
+import Menu from '../../components/Menu'; // Importando o Menu
 
-function Home() {
+function Aluno() {
   const [username, setUsername] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [alunos, setAlunos] = useState<UserResponse[]>([]);
@@ -105,8 +106,8 @@ function Home() {
 
   const confirmarPagamento = async () => {
     if (selectedAluno) {
-      if(!selectedAluno.pagamentoAtrasado) {
-        alert("Seu pagamento está EM DIA")
+      if (!selectedAluno.pagamentoAtrasado) {
+        alert("Seu pagamento está EM DIA");
         return;
       }
       await alunoService.confirmPayment(selectedAluno.cpf);
@@ -115,13 +116,14 @@ function Home() {
     }
   };
 
+  const [menu, setMenu] = useState(false);
+
   return (
     <div className='home'>
+      {menu && <Menu onClose={() => setMenu(false)}/>}
       <div className='topo'>
+        <BsMenuButton className='btn-menu'onClick={() => setMenu(true)}/>
         <span>Olá, {username}</span>
-      </div>
-      <div className='menu-icon' onClick={() => alert('Menu aberto!')}>
-        <i className='fa fa-bars'></i>
       </div>
       <div className='lista-alunos'>
         <h2>Lista de Alunos</h2>
@@ -191,8 +193,8 @@ function Home() {
         </div>
       )}
       {isPaymentModalOpen && selectedAluno && (
-        <div className='modal'>
-          <div className='modal-content'>
+        <div className='modal modal-pagamento'>
+          <div className='modal-content modal-content-pagamento'>
             <span className='close' onClick={fecharPaymentModal}>&times;</span>
             <h2>Confirmar Pagamento</h2>
             <div className='aluno-atributo'>
@@ -205,14 +207,11 @@ function Home() {
               <strong>Esporte:</strong> {selectedAluno.esporte}
             </div>
             <div className='aluno-atributo'>
-              <strong>Data do Pagamento:</strong> {selectedAluno.dataPagamento}
-            </div>
-            <div className='aluno-atributo'>
-              <strong>Status:</strong> {selectedAluno.pagamentoAtrasado ? <span>ATRASADO</span> : <span>EM DIA</span>}
+              <strong>Data de Pagamento:</strong> {selectedAluno.dataPagamento}
             </div>
             <div className='button-container'>
               <button type='button' onClick={fecharPaymentModal}>Cancelar</button>
-              <button type='button' onClick={confirmarPagamento}>Pagar</button>
+              <button type='button' onClick={confirmarPagamento}>Confirmar</button>
             </div>
           </div>
         </div>
@@ -221,4 +220,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Aluno;

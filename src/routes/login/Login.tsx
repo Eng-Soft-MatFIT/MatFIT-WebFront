@@ -15,7 +15,7 @@ function Login() {
 
   function loginUser(user : User){
     localStorage.setItem("username", user.username);
-    navigate("/home");
+    navigate("/aluno");
   }
   return (
     <form className="login" onSubmit={handleSubmit(loginUser)}>
