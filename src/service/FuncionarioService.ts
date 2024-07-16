@@ -2,7 +2,7 @@ import { FuncionarioResponse, FuncionarioUpdate } from "../types/Funcionario";
 
 export class FuncionarioService {
 
-  apiUrl = "http://localhost:8080";
+  apiUrl = "https://mat-fit.up.railway.app";
 
   async insertFuncionario(funcionario: FuncionarioResponse) {
     try {
