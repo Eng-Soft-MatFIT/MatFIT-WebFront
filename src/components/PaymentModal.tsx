@@ -1,5 +1,6 @@
 import React from 'react';
 import { UserResponse } from '../types/User';
+import {BsCheckCircleFill, BsExclamationCircleFill} from "react-icons/bs"
 
 interface PaymentModalProps {
   selectedAluno: UserResponse;
@@ -24,9 +25,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ selectedAluno, confirmarPag
       <div className='aluno-atributo'>
         <strong>Data de Pagamento:</strong> {selectedAluno.dataPagamento}
       </div>
+      <div className='aluno-atributo'>
+        <strong>Status do Pagamento:</strong> {selectedAluno.pagamentoAtrasado ? <BsExclamationCircleFill id='status-atrasado'/> : <BsCheckCircleFill id='status-emdia'/>}
+      </div>
       <div className='button-container'>
         <button type='button' onClick={fecharPaymentModal}>Cancelar</button>
-        <button type='button' onClick={confirmarPagamento}>Confirmar</button>
+        <button type='button' onClick={confirmarPagamento} id='btn-pagar'>Pagar</button>
       </div>
     </div>
   </div>
