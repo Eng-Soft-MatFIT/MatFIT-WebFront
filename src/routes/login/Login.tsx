@@ -2,6 +2,7 @@ import "./Login.css";
 import weigth from "../../assets/peso-de-academia.png";
 import {useNavigate} from "react-router-dom"
 import { useLogin } from "../../hooks/useLogin";
+import { useEffect } from "react";
 
 interface User {
   username : string
@@ -17,6 +18,15 @@ function Login() {
     localStorage.setItem("username", user.username);
     navigate("/aluno");
   }
+
+  useEffect(() => {
+    const token : string | null = localStorage.getItem("username");
+
+    if(token) {
+      navigate("/aluno");
+    }
+  }, []);
+
   return (
     <form className="login" onSubmit={handleSubmit(loginUser)}>
       <h2>Login</h2>
