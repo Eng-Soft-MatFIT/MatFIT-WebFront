@@ -97,10 +97,6 @@ function Equipamento() {
 
   const [menu, setMenu] = useState(false);
 
-  function showLoading() {
-    return <Loading />
-  }
-
   return (
     <div className='home'>
       {menu && <Menu onClose={() => setMenu(false)} />}
@@ -152,7 +148,7 @@ function Equipamento() {
           fecharEditModal={fecharEditModal}
         />
       )}
-      {loading && showLoading()}
+      {loading && <Loading />}
     </div>
   );
 }
