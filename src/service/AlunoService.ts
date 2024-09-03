@@ -2,7 +2,7 @@ import { User, UserResponse, UserUpdate } from "../types/User";
 
 export class AlunoService {
 
-  apiUrl = "https://matfit.up.railway.app";
+  apiUrl = "https://matfit-api.up.railway.app";
 
   async insertUser(aluno: User) {
     try {

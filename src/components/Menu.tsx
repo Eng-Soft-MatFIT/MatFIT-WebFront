@@ -2,13 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import './Menu.css';
 
 interface MenuProps {
-  onClose : () => void
+  onClose: () => void
 }
 
-function Menu({ onClose } : MenuProps) {
+function Menu({ onClose }: MenuProps) {
   const navigate = useNavigate();
 
-  const handleNavigation = (path : string) => {
+  const handleNavigation = (path: string) => {
     navigate(path);
     onClose();
   };
@@ -23,6 +23,12 @@ function Menu({ onClose } : MenuProps) {
         </button>
         <button onClick={() => handleNavigation("/funcionario")}>
           Funcionário
+        </button>
+        <button onClick={() => {
+          localStorage.clear();
+          handleNavigation("/");
+        }}>
+          Sair
         </button>
       </div>
     </div>

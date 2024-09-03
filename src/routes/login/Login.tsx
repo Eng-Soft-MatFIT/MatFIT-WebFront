@@ -29,7 +29,7 @@ function Login() {
 
   return (
     <form className="login" onSubmit={handleSubmit(loginUser)}>
-      <h2>Login</h2>
+      <h2>MatFIT</h2>
 
       <div className="login-container">
         <img src={weigth} alt="logo" width={150} height={150} />

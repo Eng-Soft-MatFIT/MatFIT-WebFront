@@ -2,7 +2,7 @@ import { EquipamentoUpdate } from "../types/Equipamento";
 
 export class EquipamentoService {
 
-  apiUrl = "https://matfit.up.railway.app";
+  apiUrl = "https://matfit-api.up.railway.app";
 
   async insertEquipamento(equipamento: EquipamentoUpdate) {
     try {
