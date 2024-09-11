@@ -21,6 +21,14 @@
   color: #fff;
 }
 
+.icon-close {
+  cursor: pointer;
+}
+
+.icon-close:hover {
+  color: red;
+}
+
 .menu-dropdown {
   margin-top: 1.8em;
 }

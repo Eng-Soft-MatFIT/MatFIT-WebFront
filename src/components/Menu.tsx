@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom';
-import './Menu.css';
+import { useNavigate } from "react-router-dom";
+import "./Menu.css";
 
 interface MenuProps {
-  onClose: () => void
+  onClose: () => void;
 }
 
 function Menu({ onClose }: MenuProps) {
@@ -15,7 +15,11 @@ function Menu({ onClose }: MenuProps) {
 
   return (
     <div className="menu">
-      <span className="menu-close" onClick={onClose}>X</span>
+      <div className="menu-close">
+        <span className="icon-close" onClick={onClose}>
+          X
+        </span>
+      </div>
       <div className="menu-dropdown">
         <button onClick={() => handleNavigation("/aluno")}>Aluno</button>
         <button onClick={() => handleNavigation("/equipamento")}>
@@ -24,10 +28,12 @@ function Menu({ onClose }: MenuProps) {
         <button onClick={() => handleNavigation("/funcionario")}>
           Funcionário
         </button>
-        <button onClick={() => {
-          localStorage.clear();
-          handleNavigation("/");
-        }}>
+        <button
+          onClick={() => {
+            localStorage.clear();
+            handleNavigation("/");
+          }}
+        >
           Sair
         </button>
       </div>
