@@ -2,7 +2,7 @@ import { FuncionarioResponse, FuncionarioUpdate } from "../types/Funcionario";
 
 export class FuncionarioService {
 
-  apiUrl = "https://matfit-api.up.railway.app";
+  apiUrl = "https://matfit-api-production.up.railway.app";
 
   async insertFuncionario(funcionario: FuncionarioResponse) {
     try {
